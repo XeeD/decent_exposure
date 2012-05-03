@@ -118,6 +118,12 @@ For most things, you'll be able to pass a few configuration options and get
 the desired behavior. For everything else, there's `decent_exposure`'s notion
 of strategies:
 
+    # set default values
+    exposure do
+      orm :mongoid
+    end
+
+    # set values for a named exposure (must declare explicitly)
     exposure(:example) do
       orm :mem_cache
       model { Thing }
@@ -125,5 +131,7 @@ of strategies:
       scope { model.scoped.further }
     end
 
-    expose(:foo, exposure: :example)
+    expose(:quuz) # uses mongoid, per the default
+    expose(:foo, exposure: :example) # uses mem_cache, as specified by the named exposure
+    expose(:bar, orm: :active_record) # uses active_record, as specified
 

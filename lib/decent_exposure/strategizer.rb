@@ -2,9 +2,9 @@ require 'decent_exposure/active_record'
 
 module DecentExposure
   class Strategizer
-    attr_reader :name, :block, :default_exposure
-    def initialize(name, default_exposure)
-      @name, @default_exposure = name, default_exposure
+    attr_reader :name, :block, :configuration, :default_exposure
+    def initialize(name, configuration, default_exposure)
+      @name, @configuration, @default_exposure =  name, configuration, default_exposure
       @block = Proc.new if block_given?
     end
 
@@ -14,7 +14,7 @@ module DecentExposure
       elsif default_exposure
         DefaultStrategy.new(name, default_exposure)
       else
-        ActiveRecord.new(name)
+        ORMStrategy.new(configuration.orm, name).instance
       end
     end
   end
@@ -22,6 +22,21 @@ module DecentExposure
   class DefaultStrategy < Struct.new(:name, :block)
     def call(controller)
       controller.instance_exec(name, &block)
+    end
+  end
+
+  class ORMStrategy
+    attr_reader :orm, :name
+    def initialize(orm,name)
+      @orm, @name = orm, name
+    end
+
+    def class_constant
+      DecentExposure::Inflector.new(orm).namespaced_constant
+    end
+
+    def instance
+      class_constant.new(name)
     end
   end
 

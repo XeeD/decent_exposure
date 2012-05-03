@@ -1,7 +1,8 @@
 module DecentExposure
   module ConfigurationDSL
+    attr_reader :decent_configuration
     def exposure(&block)
-      @decent_config ||= DecentExposure::Configuration.new(&block)
+      @decent_configuration ||= DecentExposure::Configuration.new(&block)
     end
   end
 

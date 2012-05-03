@@ -9,8 +9,16 @@ module DecentExposure
       @original = name.to_s
     end
 
+    def namespaced_constant
+      "DecentExposure::#{class_name}".constantize
+    end
+
     def constant
-      original.classify.constantize
+      class_name.constantize
+    end
+
+    def class_name
+      original.classify
     end
 
     def parameter

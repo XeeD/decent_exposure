@@ -59,6 +59,12 @@ end
 
 class MallardController < DuckController; end
 
+class ConfiguredController < ActionController::Base
+  exposure do
+    orm :active_record
+  end
+end
+
 class DefaultExposureController < ActionController::Base
   default_exposure do |name|
     name.to_s.upcase

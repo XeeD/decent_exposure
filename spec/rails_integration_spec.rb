@@ -105,6 +105,14 @@ describe DefaultExposureController, :type => :controller do
   end
 end
 
+describe ConfiguredController, type: :controller do
+  describe 'exposure configuration' do
+    it 'allows specification of the ORM' do
+      ConfiguredController.decent_configuration.orm.should be(:active_record)
+    end
+  end
+end
+
 describe ChildDefaultExposureController, :type => :controller do
   describe 'default exposure inheritance' do
     it 'uses the parent default exposure' do
